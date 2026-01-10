@@ -8,6 +8,12 @@
 #define WHITE 0xffffff
 #define BLACK 0x000000
 
+// Draws a circle with center x, y and radius r
+void draw_circle(SDL_Surface *surface, int x, int y, int r) {
+	SDL_Rect rect = { x, y, r, r };
+	SDL_FillRect(surface, &rect, BLACK);
+}
+
 int main() {
 
 	bool done = false;
@@ -30,12 +36,14 @@ int main() {
 		return 1;
 	}
 
-	// Fetch the window surface and paint white
+	// Fetch the window surface and paint white to start
 	SDL_Surface *surface = SDL_GetWindowSurface(window);
 	SDL_FillRect(surface, NULL, WHITE);
 	SDL_UpdateWindowSurface(window);
 
-	float fps_enforcer = 1.0 / TARGET_FPS * 1000; // How long the program should delay before drawing the next frame (ms)
+	// How long the program should delay before drawing the next frame (ms)
+	float fps_enforcer = 1.0 / TARGET_FPS * 1000; 
+
 	while (!done) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -45,10 +53,10 @@ int main() {
 					done = true;
 					break;
 				case SDL_MOUSEMOTION:
-					SDL_Rect curPos = { event.motion.x, event.motion.y, 1, 1 };
-					SDL_FillRect(surface, &curPos, BLACK);
+					draw_circle(surface, event.motion.x, event.motion.y, 5);
 			}
 		}
+
 		SDL_UpdateWindowSurface(window);
 		SDL_Delay(fps_enforcer);
 	}
