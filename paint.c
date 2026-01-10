@@ -4,6 +4,9 @@
 
 #define WIDTH 640
 #define HEIGHT 480
+#define TARGET_FPS 244
+#define WHITE 0xffffff
+#define BLACK 0x000000
 
 int main() {
 
@@ -11,7 +14,7 @@ int main() {
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	// Create an application window
+	// Create the window
 	SDL_Window *window = SDL_CreateWindow(
 		"Paint-C",
 		SDL_WINDOWPOS_CENTERED,
@@ -27,13 +30,27 @@ int main() {
 		return 1;
 	}
 
+	// Fetch the window surface and paint white
+	SDL_Surface *surface = SDL_GetWindowSurface(window);
+	SDL_FillRect(surface, NULL, WHITE);
+	SDL_UpdateWindowSurface(window);
+
+	float fps_enforcer = 1.0 / TARGET_FPS * 1000; // How long the program should delay before drawing the next frame (ms)
 	while (!done) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				done = true;
+			switch(event.type) {
+
+				case SDL_QUIT:
+					done = true;
+					break;
+				case SDL_MOUSEMOTION:
+					SDL_Rect curPos = { event.motion.x, event.motion.y, 1, 1 };
+					SDL_FillRect(surface, &curPos, BLACK);
 			}
 		}
+		SDL_UpdateWindowSurface(window);
+		SDL_Delay(fps_enforcer);
 	}
 
 	return 0;
