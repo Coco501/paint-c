@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <math.h>
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -8,10 +9,23 @@
 #define WHITE 0xffffff
 #define BLACK 0x000000
 
+int distance_from_to(int x_1, int y_1, int x_2, int y_2) {
+	return ceil(sqrt(pow(x_2 - x_1, 2) + pow(y_2 - y_1, 2)));
+}
+
 // Draws a circle with center x, y and radius r
 void draw_circle(SDL_Surface *surface, int x, int y, int r) {
-	SDL_Rect rect = { x, y, r, r };
-	SDL_FillRect(surface, &rect, BLACK);
+	SDL_Rect rect = { 0, 0, 1, 1 };
+
+	for (int i = x-r; i < x+r; i++) {
+		for (int j = y-r; j < y+r; j++) {
+			if (distance_from_to(x, y, i, j) <= r) {
+				rect.x = i;
+				rect.y = j;
+				SDL_FillRect(surface, &rect, BLACK);
+			}
+		}
+	}
 }
 
 int main() {
@@ -53,7 +67,7 @@ int main() {
 					done = true;
 					break;
 				case SDL_MOUSEMOTION:
-					draw_circle(surface, event.motion.x, event.motion.y, 5);
+					draw_circle(surface, event.motion.x, event.motion.y, 3);
 			}
 		}
 
