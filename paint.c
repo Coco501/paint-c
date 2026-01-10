@@ -114,6 +114,9 @@ int main() {
 						case SDLK_4:
 							cur_color = BLACK;
 							break;
+						case SDLK_e:
+							cur_color = WHITE; // Eraser
+							break;
 					}
 			}
 		}
