@@ -73,7 +73,7 @@ int main() {
 	float fps_enforcer = 1.0 / TARGET_FPS * 1000; 
 
 	// Default brush settings
-	int cur_color = BLUE; 
+	int cur_color = BLACK; 
 	int cur_thickness = 3;
 
 	while (!done) {
